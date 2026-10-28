@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HIBSAGO Treatment Timeline</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: top-to-bottom algorithm in the left column; hold/stop rules in a sticky right panel beside treatment weeks.
+   Phone: one column, the rules panel sits right after weeks 13–24. Black for steps, red only for decisions and stop. */
+:root {
+  --bg: #FFFFFF;
+  --fg: #151515;
+  --muted: #656565;
+  --rule: #DDDDDD;
+  --box: #F4F4F4;
+  --red: #B42318;
+  --red-soft: #FDF0EE;
+  --inv: #FFFFFF;
+  --font: "Source Sans 3", "Segoe UI", Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #141414; --fg: #EDEDED; --muted: #A3A3A3; --rule: #353535; --box: #202020; --red: #F26B5E; --red-soft: #2B1917; --inv: #141414; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #141414; --fg: #EDEDED; --muted: #A3A3A3; --rule: #353535; --box: #202020; --red: #F26B5E; --red-soft: #2B1917; --inv: #141414; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 16px; line-height: 1.35;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px 40px; }
+.page { max-width: 1160px; margin: 0 auto; }
+h1 { font-size: 24px; margin: 0; font-weight: 800; }
+.sub { color: var(--muted); margin: 2px 0 18px; }
+b { font-weight: 700; }
+a { color: inherit; }
+a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.red { color: var(--red); }
+.m { color: var(--muted); }
+
+/* ---------- grid: flow + sticky rules ---------- */
+.flow { display: grid; grid-template-columns: minmax(0, 1fr); }
+.flow > * { min-width: 0; }
+@media (min-width: 980px) {
+  .flow { grid-template-columns: minmax(0, 1fr) 360px; column-gap: 28px; }
+  .flow > * { grid-column: 1; }
+  .flow > .rules { grid-column: 2; grid-row: 3 / span 6; align-self: start; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); }
+}
+
+/* ---------- steps ---------- */
+.step { border: 2px solid var(--fg); border-radius: 6px; padding: 12px 16px 14px; }
+.eyebrow { font-size: 12.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.title { font-size: 21px; font-weight: 800; line-height: 1.2; margin-top: 2px; }
+.line { margin-top: 6px; }
+.down { height: 26px; width: 2px; background: var(--fg); margin-left: 28px; position: relative; }
+.down::after { content: ""; position: absolute; left: -5px; bottom: 0; border: 6px solid transparent; border-top: 8px solid var(--fg); border-bottom: 0; }
+
+/* dose + labs inside a treatment step */
+.inner { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px 20px; margin-top: 8px; }
+@media (min-width: 640px) { .inner { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } }
+.dose { font-size: 19px; font-weight: 800; line-height: 1.25; }
+.must { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 3px; font-size: 15px; }
+.must li { padding-left: 14px; position: relative; }
+.must li::before { content: ""; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; background: var(--fg); }
+.labs { width: 100%; border-collapse: collapse; font-size: 15px; }
+.labs caption { text-align: left; font-size: 12.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-bottom: 3px; }
+.labs th, .labs td { text-align: left; padding: 4px 0; border-top: 1px solid var(--rule); vertical-align: baseline; }
+.labs th { font-weight: 700; padding-right: 8px; }
+.labs th small { font-weight: 400; color: var(--muted); font-size: 13px; }
+.labs td { text-align: right; }
+.labs td.l { text-align: left; }
+.t { display: inline-block; font-size: 13px; font-weight: 700; padding: 0 7px; border-radius: 3px; border: 1.5px solid var(--fg); white-space: nowrap; }
+.t.wk { background: var(--fg); color: var(--inv); }
+.t.q2 { background: transparent; }
+.chg { display: block; font-size: 12.5px; font-weight: 700; color: var(--red); }
+.checkrule { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--rule); font-size: 14.5px; }
+.checkrule a { font-weight: 700; }
+
+/* eligibility */
+.elig { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px 24px; margin-top: 8px; }
+@media (min-width: 640px) { .elig { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); } }
+.elig h3 { margin: 0 0 4px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 800; }
+.elig h3.no { color: var(--red); }
+.ck { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.ck li { padding-left: 24px; position: relative; }
+.ck li::before { content: ""; position: absolute; left: 0; top: 3px; width: 14px; height: 14px; border: 2px solid var(--fg); border-radius: 3px; }
+.ck.x li::before { content: "×"; border: none; top: -3px; width: auto; height: auto; font-weight: 800; color: var(--red); font-size: 19px; }
+.ck .n, .fn { color: var(--muted); font-size: 13.5px; }
+.base { margin-top: 12px; }
+.base td.v { font-weight: 700; text-align: right; }
+
+/* decisions */
+.dec { border: 3px solid var(--red); border-radius: 6px; padding: 12px 16px 16px; background: var(--red-soft); }
+.dec .eyebrow { color: var(--red); }
+.draw { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 4px 8px; margin-top: 8px; align-items: start; }
+.num { width: 22px; height: 22px; border-radius: 50%; background: var(--red); color: var(--inv); font-weight: 800; font-size: 13px; display: grid; place-items: center; }
+.draw .what { font-size: 17px; }
+.draw .what b { font-weight: 800; }
+.crit { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 3px; }
+.crit li { padding-left: 24px; position: relative; font-size: 16px; }
+.crit li::before { content: ""; position: absolute; left: 0; top: 3px; width: 14px; height: 14px; border: 2px solid var(--red); border-radius: 3px; background: var(--bg); }
+.split { --g: 12px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--g); margin-top: 8px; padding-top: 20px; position: relative; }
+.split::before { content: ""; position: absolute; top: 0; left: calc((100% - var(--g)) / 4); right: calc((100% - var(--g)) / 4); height: 2px; background: var(--fg); }
+.br { background: var(--bg); border: 2px solid var(--fg); border-radius: 6px; padding: 9px 12px; position: relative; }
+.br::before { content: ""; position: absolute; top: -22px; left: calc(50% - 1px); width: 2px; height: 20px; background: var(--fg); }
+.br .if { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+.br .then { font-size: 18px; font-weight: 800; line-height: 1.2; margin-top: 2px; }
+.br .n { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.br .go { display: inline-block; margin-top: 8px; font-size: 14.5px; font-weight: 700; }
+.split-mid { position: absolute; top: -10px; left: calc(50% - 1px); width: 2px; height: 10px; background: var(--fg); }
+
+.stopbox { border-color: var(--red); }
+.stopbox .title { color: var(--red); }
+
+/* rules panel */
+.rules { border: 2px solid var(--fg); border-radius: 6px; padding: 12px 14px; margin: 26px 0; background: var(--bg); scroll-margin-top: 12px; }
+@media (min-width: 980px) { .rules { margin: 0; } }
+.rules h2 { margin: 0; font-size: 18px; font-weight: 800; }
+.rules .lead { font-size: 14px; color: var(--muted); margin: 2px 0 8px; }
+.rg { border-top: 2px solid var(--fg); padding: 8px 0 6px; }
+.rg h3 { margin: 0 0 4px; font-size: 15px; font-weight: 800; }
+.rg h3 small { font-weight: 400; color: var(--muted); font-size: 13px; }
+.rr { display: grid; grid-template-columns: 66px minmax(0, 1fr); gap: 2px 8px; font-size: 14.5px; padding: 3px 0; }
+.rr .k { font-size: 11.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; padding-top: 2px; }
+.rr.stop .k, .rr.stop .v b { color: var(--red); }
+.rr .v .n { display: block; color: var(--muted); font-size: 13.5px; }
+.bleed { margin-top: 8px; border-left: 4px solid var(--red); background: var(--red-soft); padding: 7px 10px; font-size: 14.5px; }
+
+.after { margin-top: 30px; }
+.after h2 { font-size: 18px; margin: 0 0 6px; }
+.after ul { margin: 0; padding-left: 18px; }
+.after li { margin: 4px 0; }
+footer { margin-top: 28px; padding-top: 8px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 13.5px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <h1>HIBSAGO (bepirovirsen) protocol</h1>
+  <p class="sub">Added to NrtI for chronic hep B. 24 weeks of HIBSAGO, then at least 24 more weeks of NrtI, then decide on NrtI.</p>
+
+  <div class="flow">
+
+    <!-- 1. Eligibility -->
+    <section class="step">
+      <div class="eyebrow">Before day 1</div>
+      <div class="title">Is the patient eligible?</div>
+      <div class="elig">
+        <div>
+          <h3>Must have all</h3>
+          <ul class="ck">
+            <li>Adult, chronic hep B</li>
+            <li>On NrtI <b>≥6 months</b></li>
+            <li>HBV DNA suppressed* <span class="n">(trials: &lt;90 IU/mL)</span></li>
+            <li>qHBsAg <b>≤3,000 IU/mL</b></li>
+            <li>Platelets <b>≥100</b> ×10⁹/L</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="no">Must have none</h3>
+          <ul class="ck x">
+            <li>Cirrhosis <span class="n">(any Child-Pugh)</span></li>
+            <li>Acute hepatic impairment</li>
+            <li>HDV coinfection</li>
+            <li>Peginterferon</li>
+          </ul>
+        </div>
+      </div>
+      <table class="labs base">
+        <caption>Baseline labs</caption>
+        <tr><th>CBC</th><td class="l m">platelets</td><td class="v">≥100</td></tr>
+        <tr><th>qHBsAg <small>FDA-authorized assay</small></th><td class="l m">level</td><td class="v">≤3,000 IU/mL</td></tr>
+        <tr><th>HBV DNA</th><td class="l m">viral load</td><td class="v">suppressed*</td></tr>
+        <tr><th>LFTs <small>+ AST</small></th><td class="l m">baseline ALT, bili</td><td class="v">record</td></tr>
+        <tr><th>BMP <small>+ urine ACR</small></th><td class="l m">baseline eGFR</td><td class="v">record</td></tr>
+      </table>
+      <p class="fn">* The PI says "suppressed" without a number; B-Well enrolled HBV DNA &lt;90 IU/mL. Low-normal platelets: rule out cirrhosis first.</p>
+    </section>
+    <div class="down"></div>
+
+    <!-- 2. Weeks 1-12 -->
+    <section class="step">
+      <div class="eyebrow">Weeks 1–12</div>
+      <div class="inner">
+        <div>
+          <div class="dose">Wk 1–2: 300 mg twice a week</div>
+          <div class="dose">Wk 3–12: 300 mg once a week</div>
+          <ul class="must">
+            <li>300 mg = two 150 mg shots, ≥5 cm apart</li>
+            <li>First dose in clinic</li>
+            <li>Twice-weekly doses 3–4 days apart</li>
+            <li>Continue NrtI</li>
+          </ul>
+        </div>
+        <table class="labs">
+          <caption>Standing labs</caption>
+          <tr><th>CBC</th><td><span class="t wk">Weekly</span></td></tr>
+          <tr><th>LFTs</th><td><span class="t wk">Weekly</span></td></tr>
+          <tr><th>BMP</th><td><span class="t q2">Every 2 wk</span></td></tr>
+        </table>
+      </div>
+      <div class="checkrule">Check every result against the <a href="#rules">hold / stop rules</a> before the next dose.</div>
+    </section>
+    <div class="down"></div>
+
+    <!-- 3. Week 12 decision -->
+    <section class="dec">
+      <div class="eyebrow">Week 12 · Decision</div>
+      <div class="draw"><span class="num">1</span><div class="what">At the week 12 visit, <b>draw qHBsAg</b>. Keep dosing weekly while you wait.</div></div>
+      <div class="draw"><span class="num">2</span><div class="what"><b>Read the result:</b></div></div>
+      <div class="split">
+        <span class="split-mid"></span>
+        <div class="br"><div class="if">qHBsAg &lt;1 IU/mL</div><div class="then">Continue to week 24</div><div class="n">34% reach sustained response</div><span class="go">↓ Continue below</span></div>
+        <div class="br"><div class="if">qHBsAg ≥1 IU/mL</div><div class="then">Consider stopping HIBSAGO now</div><div class="n">Only 2% respond. Keep NrtI.</div><a class="go" href="#stopped">→ Go to “After HIBSAGO stops”</a></div>
+      </div>
+    </section>
+    <div class="down"></div>
+
+    <!-- 4. Weeks 13-24 -->
+    <section class="step">
+      <div class="eyebrow">Weeks 13–24</div>
+      <div class="inner">
+        <div>
+          <div class="dose">300 mg once a week</div>
+          <ul class="must"><li>Same day each week</li><li>Continue NrtI</li></ul>
+        </div>
+        <table class="labs">
+          <caption>Standing labs</caption>
+          <tr><th>CBC</th><td><span class="t wk">Weekly</span></td></tr>
+          <tr><th>LFTs</th><td><span class="t q2">Every 2 wk</span><span class="chg">less often from wk 13</span></td></tr>
+          <tr><th>BMP</th><td><span class="t q2">Every 2 wk</span></td></tr>
+        </table>
+      </div>
+      <div class="checkrule">Check every result against the <a href="#rules">hold / stop rules</a> before the next dose.</div>
+    </section>
+
+    <!-- Hold / stop rules (sticky beside treatment on laptop) -->
+    <aside class="rules" id="rules">
+      <h2>Hold / stop rules</h2>
+      <p class="lead">Apply to every lab in weeks 1–24.</p>
+      <div class="rg">
+        <h3>CBC <small>platelets ×10⁹/L</small></h3>
+        <div class="rr"><span class="k">Hold</span><span class="v"><b>50–99</b><span class="n">Restart 300 mg at ≥100. If 50–74, recheck every 2–3 days.</span></span></div>
+        <div class="rr stop"><span class="k">Stop</span><span class="v"><b>&lt;50</b><span class="n">Consider steroids with an expert</span></span></div>
+        <div class="rr"><span class="k">Recheck</span><span class="v">Fell ≥30% since last count → repeat before dosing</span></div>
+      </div>
+      <div class="rg">
+        <h3>LFTs <small>ALT, total bilirubin</small></h3>
+        <div class="rr"><span class="k">Watch</span><span class="v"><b>ALT 10–12× ULN</b><span class="n">Keep dosing. LFTs twice a week until ALT falls.</span></span></div>
+        <div class="rr"><span class="k">Hold</span><span class="v"><b>ALT ≥12× ULN</b>, or <b>ALT ≥3× + bili 1.5–2× ULN</b><span class="n">LFTs twice a week. Restart <b>150 mg</b> when ALT &lt;10× (and bili &lt;1.5×); back to 300 mg as ALT keeps falling.</span></span></div>
+        <div class="rr stop"><span class="k">Stop</span><span class="v"><b>ALT ≥10× for 4+ weeks</b>, or <b>ALT ≥3× + bili ≥2× ULN</b></span></div>
+      </div>
+      <div class="rg">
+        <h3>BMP <small>eGFR vs baseline</small></h3>
+        <div class="rr"><span class="k">Hold</span><span class="v"><b>Down ≥30%</b> on 2 readings in a row<span class="n">BMP weekly. Restart 300 mg when within 15% of baseline.</span></span></div>
+        <div class="rr stop"><span class="k">Stop</span><span class="v"><b>Glomerulonephritis</b></span></div>
+      </div>
+      <div class="rg">
+        <h3>Anytime</h3>
+        <div class="rr stop"><span class="k">Stop</span><span class="v"><b>Vasculitis or immune reaction</b> with no other cause</span></div>
+      </div>
+      <div class="bleed"><b class="red">Bleeding, bruising, petechiae, bad headache:</b> hold the dose, CBC today.</div>
+    </aside>
+    <div class="down"></div>
+
+    <!-- 5. Stop -->
+    <section class="step stopbox">
+      <div class="eyebrow red">Week 24</div>
+      <div class="title">Stop HIBSAGO</div>
+      <div class="line">24 weeks is the maximum. Never extend.</div>
+    </section>
+    <div class="down"></div>
+
+    <!-- 6. After stop -->
+    <section class="step" id="stopped" style="scroll-margin-top:12px">
+      <div class="eyebrow">After HIBSAGO stops · weeks 25–48</div>
+      <div class="inner">
+        <div>
+          <div class="dose">NrtI only, at least 24 more weeks</div>
+          <ul class="must"><li>Required after the 24-week course</li><li>Stopped early at week 12? Keep NrtI. The PI's NrtI-stop rules are written for a full course.</li></ul>
+        </div>
+        <table class="labs">
+          <caption>Only if abnormal at the last dose</caption>
+          <tr><th>LFTs</th><td>4, 12, 24 wk after</td></tr>
+          <tr><th>CBC</th><td>4 and 12 wk after</td></tr>
+          <tr><th>BMP</th><td>4 and 12 wk after</td></tr>
+        </table>
+      </div>
+    </section>
+    <div class="down"></div>
+
+    <!-- 7. Week 48 decision -->
+    <section class="dec">
+      <div class="eyebrow">Week 48 · Decision</div>
+      <div class="draw"><span class="num">1</span><div class="what">At the week 48 visit, <b>draw HBeAg, HBV DNA, qHBsAg, LFTs</b>. Keep NrtI while you wait.</div></div>
+      <div class="draw"><span class="num">2</span><div class="what"><b>Are all five true?</b>
+        <ul class="crit">
+          <li>HBeAg <b>negative</b></li>
+          <li>HBV DNA <b>&lt;20 IU/mL</b></li>
+          <li>HBsAg <b>not detected</b> <span class="m">(&lt;0.05 IU/mL)</span></li>
+          <li>ALT <b>≤2× ULN</b></li>
+          <li>NrtI <b>not needed for HIV</b></li>
+        </ul></div></div>
+      <div class="split">
+        <span class="split-mid"></span>
+        <div class="br"><div class="if">Yes, all five</div><div class="then">May stop NrtI</div><div class="n">Then check HBsAg, HBV DNA and LFTs frequently for at least 1 year (PI gives no interval). Restart treatment if HBV rebounds.</div></div>
+        <div class="br"><div class="if">No, any one</div><div class="then">Continue NrtI</div><div class="n">Usual hep B follow-up.</div></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="after">
+    <h2>Also</h2>
+    <ul>
+      <li><b>Missed dose:</b> give it as soon as possible. If the next dose is due in under 3 days, skip it.</li>
+      <li><b>Rotate injection sites</b> every week (thigh or belly). Omental infarction was reported when sites weren't rotated.</li>
+      <li><b>Caution:</b> anticoagulants or bleeding risk, eGFR ≤60, autoimmune disease or vasculitis, transplant.</li>
+      <li><b>HIV coinfection:</b> only the HIV provider stops the NrtI.</li>
+    </ul>
+  </section>
+
+  <footer>From the <a href="https://gskpro.com/content/dam/global/hcpportal/en_US/Prescribing_Information/Hibsago/pdf/HIBSAGO-PI-MG-IFU.PDF" target="_blank" rel="noopener">HIBSAGO prescribing information (Oct 2026)</a>, sections 2–5 and 14. Lab schedules are minimums. Response rates are from B-Well 1/2, baseline qHBsAg ≤3,000.</footer>
+</div>
+</body>
+</html>
