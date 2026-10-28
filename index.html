@@ -146,6 +146,7 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 /* phone: labs keep each value on one line, qualifiers drop below the test name, decision branches stack */
 @media (max-width: 559px) {
   .labs td { white-space: nowrap; padding-left: 10px; }
+  .labs th small { display: inline-block; white-space: nowrap; }
   .base tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; border-top: 1px solid var(--rule); padding: 4px 0; }
   .base th, .base td { border-top: 0; padding: 0; }
   .base td.l { grid-column: 1; grid-row: 2; font-size: 14px; }
