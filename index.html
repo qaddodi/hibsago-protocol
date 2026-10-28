@@ -56,8 +56,8 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 /* ---------- grid: flow + sticky rules ---------- */
 .flow { display: grid; grid-template-columns: minmax(0, 1fr); }
 .flow > * { min-width: 0; }
-@media (min-width: 980px) {
-  .flow { grid-template-columns: minmax(0, 1fr) 360px; column-gap: 28px; }
+@media (min-width: 1200px) {
+  .flow { grid-template-columns: minmax(0, 1fr) 400px; column-gap: 28px; }
   .flow > * { grid-column: 1; }
   .flow > .rules { grid-column: 2; grid-row: 3 / span 6; align-self: start; position: sticky; top: calc(var(--qd-head-h) + 12px); }
 }
@@ -129,7 +129,7 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 
 /* rules panel */
 .rules { border: 2px solid var(--fg); border-radius: 6px; padding: 12px 14px; margin: 26px 0; background: var(--bg); scroll-margin-top: calc(var(--qd-head-h) + 12px); }
-@media (min-width: 980px) { .rules { margin: 0; } }
+@media (min-width: 1200px) { .rules { margin: 0; } }
 .rules h2 { margin: 0; font-size: 18px; font-weight: 800; }
 .rules .lead { font-size: 14px; color: var(--muted); margin: 2px 0 8px; }
 .rg { border-top: 2px solid var(--fg); padding: 8px 0 6px; }
@@ -139,6 +139,10 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 .rr .k { font-size: 11.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; padding-top: 2px; }
 .rr.stop .k, .rr.stop .v b { color: var(--red); }
 .rr .v .n { display: block; color: var(--muted); font-size: 13.5px; }
+/* .ln: a deliberate line break. Long rules are split into short lines instead of wrapping. */
+.ln { display: block; }
+/* .ph: a phrase kept whole. When a line is too long it breaks between phrases, not inside one. */
+.ph { display: inline-block; }
 .bleed { margin-top: 8px; border-left: 4px solid var(--red); background: var(--red-soft); padding: 7px 10px; font-size: 14.5px; }
 
 .after { margin-top: 30px; }
@@ -167,7 +171,7 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 
 <main class="page" id="main">
   <h1>HIBSAGO (bepirovirsen) protocol</h1>
-  <p class="sub">Added to NrtI for chronic hep B. 24 weeks of HIBSAGO, then at least 24 more weeks of NrtI, then decide on NrtI.</p>
+  <p class="sub"><span class="ph">Added to NrtI for chronic hep B.</span> <span class="ph">24 weeks of HIBSAGO,</span> <span class="ph">then at least 24 more weeks of NrtI,</span> <span class="ph">then decide on NrtI.</span></p>
 
   <div class="flow">
 
@@ -204,7 +208,7 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
         <tr><th>LFTs <small>+ AST</small></th><td class="l m">baseline ALT, bili</td><td class="v">record</td></tr>
         <tr><th>BMP <small>+ urine ACR</small></th><td class="l m">baseline eGFR</td><td class="v">record</td></tr>
       </table>
-      <p class="fn">* The PI says "suppressed" without a number; B-Well enrolled HBV DNA &lt;90 IU/mL. Low-normal platelets: rule out cirrhosis first.</p>
+      <p class="fn"><span class="ln">* The PI says "suppressed" without a number; B-Well enrolled HBV DNA &lt;90 IU/mL.</span><span class="ln">Low-normal platelets: rule out cirrhosis first.</span></p>
     </section>
     <div class="down"></div>
 
@@ -236,7 +240,7 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
     <!-- 3. Week 12 decision -->
     <section class="dec">
       <div class="eyebrow">Week 12 · Decision</div>
-      <div class="draw"><span class="num">1</span><div class="what">At the week 12 visit, <b>draw qHBsAg</b>. Keep dosing weekly while you wait.</div></div>
+      <div class="draw"><span class="num">1</span><div class="what"><span class="ph">At the week 12 visit, <b>draw qHBsAg</b>.</span> <span class="ph">Keep dosing weekly while you wait.</span></div></div>
       <div class="draw"><span class="num">2</span><div class="what"><b>Read the result:</b></div></div>
       <div class="split">
         <span class="split-mid"></span>
@@ -270,26 +274,26 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
       <p class="lead">Apply to every lab in weeks 1–24.</p>
       <div class="rg">
         <h3>CBC <small>platelets ×10⁹/L</small></h3>
-        <div class="rr"><span class="k">Hold</span><span class="v"><b>50–99</b><span class="n">Restart 300 mg at ≥100. If 50–74, recheck every 2–3 days.</span></span></div>
+        <div class="rr"><span class="k">Hold</span><span class="v"><b>50–99</b><span class="n"><span class="ln">Restart 300 mg at ≥100.</span><span class="ln">If 50–74, recheck every 2–3 days.</span></span></span></div>
         <div class="rr stop"><span class="k">Stop</span><span class="v"><b>&lt;50</b><span class="n">Consider steroids with an expert</span></span></div>
-        <div class="rr"><span class="k">Recheck</span><span class="v">Fell ≥30% since last count → repeat before dosing</span></div>
+        <div class="rr"><span class="k">Recheck</span><span class="v"><span class="ln">Fell ≥30% since last count</span><span class="ln">→ repeat before dosing</span></span></div>
       </div>
       <div class="rg">
         <h3>LFTs <small>ALT, total bilirubin</small></h3>
-        <div class="rr"><span class="k">Watch</span><span class="v"><b>ALT 10–12× ULN</b><span class="n">Keep dosing. LFTs twice a week until ALT falls.</span></span></div>
-        <div class="rr"><span class="k">Hold</span><span class="v"><b>ALT ≥12× ULN</b>, or <b>ALT ≥3× + bili 1.5–2× ULN</b><span class="n">LFTs twice a week. Restart <b>150 mg</b> when ALT &lt;10× (and bili &lt;1.5×); back to 300 mg as ALT keeps falling.</span></span></div>
-        <div class="rr stop"><span class="k">Stop</span><span class="v"><b>ALT ≥10× for 4+ weeks</b>, or <b>ALT ≥3× + bili ≥2× ULN</b></span></div>
+        <div class="rr"><span class="k">Watch</span><span class="v"><b>ALT 10–12× ULN</b><span class="n"><span class="ln">Keep dosing.</span><span class="ln">LFTs twice a week until ALT falls.</span></span></span></div>
+        <div class="rr"><span class="k">Hold</span><span class="v"><span class="ln"><b>ALT ≥12× ULN</b></span><span class="ln">or <b>ALT ≥3× + bili 1.5–2× ULN</b></span><span class="n"><span class="ln">LFTs twice a week.</span><span class="ln">Restart <b>150 mg</b> when ALT &lt;10× (bili &lt;1.5×).</span><span class="ln">Back to 300 mg as ALT keeps falling.</span></span></span></div>
+        <div class="rr stop"><span class="k">Stop</span><span class="v"><span class="ln"><b>ALT ≥10× for 4+ weeks</b></span><span class="ln">or <b>ALT ≥3× + bili ≥2× ULN</b></span></span></div>
       </div>
       <div class="rg">
         <h3>BMP <small>eGFR vs baseline</small></h3>
-        <div class="rr"><span class="k">Hold</span><span class="v"><b>Down ≥30%</b> on 2 readings in a row<span class="n">BMP weekly. Restart 300 mg when within 15% of baseline.</span></span></div>
+        <div class="rr"><span class="k">Hold</span><span class="v"><b>Down ≥30%</b> on 2 readings in a row<span class="n"><span class="ln">BMP weekly.</span><span class="ln">Restart 300 mg when within 15% of baseline.</span></span></span></div>
         <div class="rr stop"><span class="k">Stop</span><span class="v"><b>Glomerulonephritis</b></span></div>
       </div>
       <div class="rg">
         <h3>Anytime</h3>
-        <div class="rr stop"><span class="k">Stop</span><span class="v"><b>Vasculitis or immune reaction</b> with no other cause</span></div>
+        <div class="rr stop"><span class="k">Stop</span><span class="v"><span class="ln"><b>Vasculitis or immune reaction</b></span><span class="ln">with no other cause</span></span></div>
       </div>
-      <div class="bleed"><b class="red">Bleeding, bruising, petechiae, bad headache:</b> hold the dose, CBC today.</div>
+      <div class="bleed"><b class="red ln">Bleeding, bruising, petechiae, bad headache:</b><span class="ln">hold the dose, CBC today.</span></div>
     </aside>
     <div class="down"></div>
 
@@ -307,7 +311,7 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
       <div class="inner">
         <div>
           <div class="dose">NrtI only, at least 24 more weeks</div>
-          <ul class="must"><li>Required after the 24-week course</li><li>Stopped early at week 12? Keep NrtI. The PI's NrtI-stop rules are written for a full course.</li></ul>
+          <ul class="must"><li>Required after the 24-week course</li><li><span class="ln">Stopped early at week 12? Keep NrtI.</span><span class="ln">The PI's NrtI-stop rules are written for a full course.</span></li></ul>
         </div>
         <table class="labs">
           <caption>Only if abnormal at the last dose</caption>
@@ -322,7 +326,7 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
     <!-- 7. Week 48 decision -->
     <section class="dec">
       <div class="eyebrow">Week 48 · Decision</div>
-      <div class="draw"><span class="num">1</span><div class="what">At the week 48 visit, <b>draw HBeAg, HBV DNA, qHBsAg, LFTs</b>. Keep NrtI while you wait.</div></div>
+      <div class="draw"><span class="num">1</span><div class="what"><span class="ph">At the week 48 visit, <b>draw HBeAg, HBV DNA, qHBsAg, LFTs</b>.</span> <span class="ph">Keep NrtI while you wait.</span></div></div>
       <div class="draw"><span class="num">2</span><div class="what"><b>Are all five true?</b>
         <ul class="crit">
           <li>HBeAg <b>negative</b></li>
@@ -333,7 +337,7 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
         </ul></div></div>
       <div class="split">
         <span class="split-mid"></span>
-        <div class="br"><div class="if">Yes, all five</div><div class="then">May stop NrtI</div><div class="n">Then check HBsAg, HBV DNA and LFTs frequently for at least 1 year (PI gives no interval). Restart treatment if HBV rebounds.</div></div>
+        <div class="br"><div class="if">Yes, all five</div><div class="then">May stop NrtI</div><div class="n"><span class="ln">Then check HBsAg, HBV DNA and LFTs</span><span class="ln">frequently for at least 1 year (PI gives no interval).</span><span class="ln">Restart treatment if HBV rebounds.</span></div></div>
         <div class="br"><div class="if">No, any one</div><div class="then">Continue NrtI</div><div class="n">Usual hep B follow-up.</div></div>
       </div>
     </section>
@@ -342,14 +346,14 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
   <section class="after">
     <h2>Also</h2>
     <ul>
-      <li><b>Missed dose:</b> give it as soon as possible. If the next dose is due in under 3 days, skip it.</li>
-      <li><b>Rotate injection sites</b> every week (thigh or belly). Omental infarction was reported when sites weren't rotated.</li>
+      <li><span class="ph"><b>Missed dose:</b> give it as soon as possible.</span> <span class="ph">If the next dose is due in under 3 days, skip it.</span></li>
+      <li><span class="ph"><b>Rotate injection sites</b> every week (thigh or belly).</span> <span class="ph">Omental infarction was reported when sites weren't rotated.</span></li>
       <li><b>Caution:</b> anticoagulants or bleeding risk, eGFR ≤60, autoimmune disease or vasculitis, transplant.</li>
       <li><b>HIV coinfection:</b> only the HIV provider stops the NrtI.</li>
     </ul>
   </section>
 
-  <footer>From the <a href="https://gskpro.com/content/dam/global/hcpportal/en_US/Prescribing_Information/Hibsago/pdf/HIBSAGO-PI-MG-IFU.PDF" target="_blank" rel="noopener">HIBSAGO prescribing information (Oct 2026)</a>, sections 2–5 and 14. Lab schedules are minimums. Response rates are from B-Well 1/2, baseline qHBsAg ≤3,000.</footer>
+  <footer><span class="ph">From the <a href="https://gskpro.com/content/dam/global/hcpportal/en_US/Prescribing_Information/Hibsago/pdf/HIBSAGO-PI-MG-IFU.PDF" target="_blank" rel="noopener">HIBSAGO prescribing information (Oct 2026)</a>, sections 2–5 and 14.</span> <span class="ph">Lab schedules are minimums.</span> <span class="ph">Response rates are from B-Well 1/2, baseline qHBsAg ≤3,000.</span></footer>
 </main>
 
 <footer class="qd-foot">
