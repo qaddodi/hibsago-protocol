@@ -49,9 +49,11 @@
   --font: "Source Sans 3", "Segoe UI", Helvetica, Arial, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --bg: #141414; --fg: #EDEDED; --muted: #A3A3A3; --rule: #353535; --box: #202020; --red: #F26B5E; --red-soft: #2B1917; --inv: #141414; color-scheme: dark; }
+  :root:not([data-theme="light"]) { --bg: #26272B; --fg: #ECECEE; --muted: #ADADB3; --rule: #47484E; --box: #303136; --red: #F47A6E; --red-soft: #3A2826; --inv: #26272B; color-scheme: dark;
+    /* the shared header/footer follow the same gray */ --qd-bg: #26272B; --qd-bg-2: #212226; --qd-surface: #303136; --qd-surface-2: #2C2D31; --qd-line: #3D3E44; --qd-line-2: #4A4B52; }
 }
-:root[data-theme="dark"] { --bg: #141414; --fg: #EDEDED; --muted: #A3A3A3; --rule: #353535; --box: #202020; --red: #F26B5E; --red-soft: #2B1917; --inv: #141414; color-scheme: dark; }
+:root[data-theme="dark"] { --bg: #26272B; --fg: #ECECEE; --muted: #ADADB3; --rule: #47484E; --box: #303136; --red: #F47A6E; --red-soft: #3A2826; --inv: #26272B; color-scheme: dark;
+    /* the shared header/footer follow the same gray */ --qd-bg: #26272B; --qd-bg-2: #212226; --qd-surface: #303136; --qd-surface-2: #2C2D31; --qd-line: #3D3E44; --qd-line-2: #4A4B52; }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -178,6 +180,40 @@ a:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 .after ul { margin: 0; padding-left: 18px; }
 .after li { margin: 4px 0; }
 .page > footer { margin-top: 28px; padding-top: 8px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 13.5px; }
+
+/* ---------- print: the whole algorithm on one US Letter page, always light ---------- */
+@page { size: letter; margin: 0.35in; }
+@media print {
+  :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
+    --bg: #FFFFFF; --fg: #151515; --muted: #555555; --rule: #CCCCCC; --box: #F4F4F4; --red: #B42318; --red-soft: #FDF0EE; --inv: #FFFFFF; color-scheme: light;
+  }
+  html, body { background: #fff !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .qd-skip, .qd-top, .qd-foot { display: none !important; }
+  .page { zoom: var(--print-zoom, 0.56); max-width: none; padding: 0; }
+  /* two columns: day 1 to week 24 on the left, after HIBSAGO and the rules on the right */
+  .flow { display: flex; flex-flow: column wrap; align-content: space-between; height: var(--print-h, 1470px); }
+  .flow > * { width: calc(50% - 10px); box-sizing: border-box; }
+  .flow > .down { width: 2px; }
+  .flow > .rules { order: 1; position: static; margin: 14px 0 0; }
+  .flow > .stopbox + .down { flex-basis: 100%; width: 0; margin: 0; background: none; }
+  .flow > .stopbox + .down::after { display: none; }
+  .inner { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+  .elig { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+  .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding-top: 20px; }
+  .split::before, .split-mid { display: block; }
+  .down { height: 14px; }
+  .step { padding: 8px 14px 10px; }
+  .dec { padding: 8px 14px 12px; }
+  .labs th, .labs td { padding: 2px 0; }
+  .split { padding-top: 14px; }
+  .br::before { top: -16px; height: 14px; }
+  .after { margin-top: 14px; }
+  .page > footer { margin-top: 12px; }
+  .step, .dec, .rules, .br { break-inside: avoid; }
+  a { text-decoration: none; }
+  .checkrule a, .br .go { text-decoration: underline; }
+}
 </style>
 </head>
 <body>
